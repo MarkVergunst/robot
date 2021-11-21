@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <style> body {
+        margin: 0
+    }
+
+    img {
+        height: 100%;
+        width: auto
+    }</style>
+</head>
+<body>
+<img id='a' src='{% static 'capture.bmp' %}'
+           onload='this.style.display="initial"; var b = document.getElementById("b"); b.style.display="none"; b.src="{% static 'capture.bmp' %}?"+Date.now(); '>
+<img id='b' style='display: none' src='{% static 'capture.bmp' %}'
+        onload='this.style.display="initial"; var a = document.getElementById("a"); a.style.display="none"; a.src="{% static 'capture.bmp' %}?"+Date.now(); '>
+</body>
+</html>

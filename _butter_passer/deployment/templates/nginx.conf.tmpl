@@ -1,0 +1,52 @@
+server {
+    listen [::]:80;
+    listen 80;
+    server_tokens off;
+    server_name ${customer}.hqweb.nl;
+    return 301 https://${customer}.hqweb.nl$request_uri;
+}
+
+server {
+
+    server_name ${customer}.hqweb.nl;
+    index index.html;
+
+    listen [::]:443 ssl http2;
+    listen 443 ssl http2;
+
+    # config to enable HSTS(HTTP Strict Transport Security)
+    add_header Strict-Transport-Security "max-age=63072000; includeSubdomains;";
+
+    ssl on;
+    # ssl-bundle.crt is a bundled certificate. Create it like this:
+    # bash> cd /etc/ssl/transip ; cat certificate.crt cabundle.crt > ssl-bundle.crt
+
+    # TODO certificaat letsencrypt
+    # ssl_certificate /etc/ssl/transip/ssl-bundle.crt;
+    # ssl_certificate_key /etc/ssl/transip/certificate.key;
+    # ssl_prefer_server_ciphers on;
+
+    client_max_body_size 100M;
+
+    location /favicon.ico {
+        alias '${target_user_home}/var/data/statics/img/favicon.ico';
+    }
+
+    location /static/ {
+        alias '${target_user_home}/var/data/statics/';
+    }
+
+    location /media/ {
+        alias '${target_user_home}/var/data/media/';
+    }
+
+    location / {
+        include uwsgi_params;
+        # uwsgi_pass unix:/tmp/monitor_srv.sock;
+        uwsgi_pass unix:${target_user_home}/var/run/uwsgi.${target}.sock;
+    }
+
+    access_log ${target_user_home}/var/log/access.log;
+    error_log ${target_user_home}/var/log/error.log error;
+
+}

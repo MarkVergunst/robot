@@ -1,0 +1,26 @@
+[uwsgi]
+
+# Django-related settings
+# the base directory (full path)
+chdir           = ${target_user_home}/butterpasser
+# Django's wsgi file
+module          = mtveendam.wsgi
+# the virtualenv (full path)
+home            = ${target_user_home}/venv
+
+# process-related settings
+pidfile         = ${target_user_home}/var/run/butterpasser_${target}.pid
+# master
+master          = true
+# maximum number of worker processes
+processes       = 3
+# the socket (use the full path to be safe
+socket          = ${target_user_home}/var/run/uwsgi.${target}.sock
+# ... with appropriate permissions - may be needed
+chmod-socket    = 666
+# clear environment on exit
+vacuum          = true
+logto           = ${target_user_home}/var/log/uwsgi.log
+disable-logging = true
+log-4xx         = true
+log-5xx         = true

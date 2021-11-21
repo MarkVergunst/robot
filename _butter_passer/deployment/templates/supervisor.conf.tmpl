@@ -1,0 +1,14 @@
+[program:${target_user}]
+command=${appserver_supervisor_cmd}                        ; Command to start app
+autostart=true
+autorestart=true
+user=${target_user}
+stopsignal=QUIT
+env=PYTHONIOENCODING=UTF-8
+
+redirect_stderr = true                                     ; Save stderr in the same log
+environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8            ; Set UTF-8 as default encoding
+stdout_logfile=${target_user_home}/var/log/stdout.log
+stdout_logfile_maxbytes=1MB
+stdout_logfile_backups=50
+stdout_capture_maxbytes=1MB

@@ -1,0 +1,48 @@
+<VirtualHost *:80>
+    ServerAdmin markvergunst@gmail.com
+    ServerName ${target}.materialstestingveendam.nl
+    RewriteEngine On
+    RewriteRule ^(.*)$$ https://${target}.materialstestingveendam.nl$$1 [R=301,L]
+</VirtualHost>
+
+
+<VirtualHost *:443>
+    ServerAdmin markvergunst@gmail.com
+    ServerName ${target}.materialstestingveendam.nl
+
+    SSLEngine On
+
+    SSLProtocol TLSv1.1 TLSv1.2
+    SSLHonorCipherOrder on
+    SSLCipherSuite "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA RC4 !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS !RC4"
+
+    Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
+
+    SSLCertificateFile    /etc/letsencrypt/live/materialstestingveendam.nl/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/materialstestingveendam.nl/privkey.pem
+    SSLCACertificateFile /etc/letsencrypt/live/materialstestingveendam.nl/chain.pem
+
+    <Directory /home/${target_user_home}/mtveendam>
+      Require all granted
+    </Directory>
+
+    Alias /static/ "${target_user_home}/mtveendam/static_cdn/"
+    <Directory "${target_user_home}/mtveendam/static_cdn/">
+        Require all granted
+    </Directory>
+
+    Alias /media/ "${target_user_home}/mtveendam/media/"
+    <Directory "${target_user_home}/mtveendam/media/">
+        Require all granted
+        Options -Indexes
+    </Directory>
+
+    ProxyPass /media !
+    ProxyPass /static !
+    # ProxyPass / uwsgi://localhost:8060/
+    ProxyPass / unix:${target_user_home}/var/run/uwsgi.${target}.sock|uwsgi://mtveendam_${target}/
+
+    ErrorLog ${target_user_home}/var/log/error.log
+    CustomLog ${target_user_home}/var/log/access.log combined
+
+</VirtualHost>

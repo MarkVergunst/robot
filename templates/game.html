@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <style>
+        .center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .center > button {
+             margin: 5px;
+        }
+    </style>
+    <div class="wrapper">
+        <div class="head">
+            <h1>Butter bot</h1>
+            <h3>Connection line: {{ room_code }}</h3>
+        </div>
+        <div id="room_code" data-id="{{ room_code }}"></div>
+        <div class="center">
+            <button type="button" onmousedown="forward(true)" onmouseup="forward(false)">forward</button>
+        </div>
+        <div class="center">
+            <button type="button" onmousedown="left(true)" onmouseup="left(false)">links</button>
+            <button type="button" onmousedown="right(true)" onmouseup="right(false)">rechts</button>
+        </div>
+        <div class="center">
+            <button type="button" onmousedown="backward(true)" onmouseup="backward(false)">back</button>
+        </div>
+        <h3 id="channel-text" style="text-align: center"></h3>
+    </div>
+{% endblock content %}
+
+
+
