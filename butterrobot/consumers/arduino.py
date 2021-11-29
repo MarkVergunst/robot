@@ -1,13 +1,14 @@
 import json
-from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from butterrobot.utils.strategy import ArduinoStrategy
 
 
 class ArduinoConsumer(AsyncJsonWebsocketConsumer):
+    room_group_name = None
+    current_user = None
+
     async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_code']
-        self.room_group_name = 'room_%s' % self.room_name
+        self.room_group_name = 'room_%s' % self.scope['url_route']['kwargs']['room_code']
         self.current_user = self.scope['user']
         # Join room group
         await self.channel_layer.group_add(
@@ -29,16 +30,12 @@ class ArduinoConsumer(AsyncJsonWebsocketConsumer):
         Receive message from WebSocket.
         Get the event and send the appropriate event
         """
-        print(text_data)
         response = json.loads(text_data)
         event = response.get("event", None)
 
-        if "camera" in response.keys():
-            executer = ArduinoStrategy("camera")
-        else:
-            executer = ArduinoStrategy(event)
+        executor = ArduinoStrategy(event)
 
-        result = executer.run(response)
+        result = executor.run(response)
 
         if not result.get('type'):
             result['type'] = 'send_message'
@@ -56,7 +53,3 @@ class ArduinoConsumer(AsyncJsonWebsocketConsumer):
         # Send message to WebSocket
         res.pop('type')
         await self.send(text_data=json.dumps(res))
-        #
-        # await self.send(text_data=json.dumps({
-        #     "payload": res,
-        # }))

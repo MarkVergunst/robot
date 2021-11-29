@@ -8,8 +8,9 @@
             align-items: center;
             justify-content: center;
         }
+
         .center > button {
-             margin: 5px;
+            margin: 5px;
         }
     </style>
     <div class="wrapper">
@@ -31,6 +32,10 @@
         <h3 id="channel-text" style="text-align: center"></h3>
     </div>
 {% endblock content %}
+
+{% block javascript %}
+    <script src="{% static 'js/game.js' %}"></script>
+{% endblock %}
 
 
 

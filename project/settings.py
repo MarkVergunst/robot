@@ -51,12 +51,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = '_butter_passer.urls'
+ROOT_URLCONF = 'project.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [BASE_DIR / 'butterbot/templates']
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -72,7 +72,7 @@ TEMPLATES = [
 
 # WSGI_APPLICATION = '_butter_passer.wsgi.application'
 # Channels
-ASGI_APPLICATION = "_butter_passer.asgi.application"
+ASGI_APPLICATION = "project.asgi.application"
 
 
 # Database

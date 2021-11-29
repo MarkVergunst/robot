@@ -15,7 +15,7 @@ from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 import butterrobot.routing
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', '_butter_passer.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
