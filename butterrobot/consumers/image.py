@@ -48,7 +48,7 @@ class ImageConsumer(AsyncJsonWebsocketConsumer):
                     stream.close()
 
                     filename = f"capture.bmp"
-                    image.save(f'{settings.STATIC_DIR}/{filename}')
+                    image.save(f'{settings.STATIC_ROOT}/{filename}')
                 except Exception as exc:
                     print(exc)
 
