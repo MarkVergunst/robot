@@ -37,7 +37,7 @@
     <script>
         var roomCode = document.getElementById("room_code").getAttribute("data-id");
 
-        var connectionString = 'ws://' + window.location.host + '/ws/' + roomCode + '/';
+        var connectionString = 'wss://' + window.location.host + '/ws/' + roomCode + '/';
         var gameSocket = new WebSocket(connectionString);
 
         function capitalizeFirstLetter(string) {
