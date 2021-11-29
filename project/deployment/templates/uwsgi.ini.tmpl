@@ -2,14 +2,14 @@
 
 # Django-related settings
 # the base directory (full path)
-chdir           = ${target_user_home}/butterpasser
+chdir           = ${target_user_home}/_BUTTER_PASSER
 # Django's wsgi file
 module          = project.wsgi
 # the virtualenv (full path)
 home            = ${target_user_home}/venv
 
 # process-related settings
-pidfile         = ${target_user_home}/var/run/butterpasser_${target}.pid
+pidfile         = ${target_user_home}/var/run/butterpasser_uwsgi.pid
 # master
 master          = true
 # maximum number of worker processes

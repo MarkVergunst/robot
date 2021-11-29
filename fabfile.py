@@ -4,8 +4,8 @@ import os
 import glob
 from fabric import task
 
-CLONE_URL = 'git@github.com:MarkVergunst/mtveendam.git'
-# CLONE_URL = 'git_guest@git.studioreactor.com:/data/gitrepos/plannerproject.git'
+CLONE_URL = 'git@github.com:MarkVergunst/robot.git'
+
 # dont forget for proxy pass apt-get install apache2 libapache2-mod-proxy-uwsgi
 # a2enmod headers deflate expires rewrite proxy proxy_uwsgi ssl
 # ssh root@85.214.27.56 -p234
@@ -19,7 +19,7 @@ FLUSH PRIVILEGES;
 
 '''
 
-fab -H root@prd.materialstestingveendam.nl prd create-app-user install-native get-latest-sourcecode prepare-postgresql prepare-virtualenv django-preparations process-configfiles prepare-webserverconfig prepare-supervisor-config
+fab -H root@butterbot.hqweb.nl prd create-app-user install-native get-latest-sourcecode prepare-postgresql prepare-virtualenv django-preparations process-configfiles prepare-webserverconfig prepare-supervisor-config
 
 one of [dev|tst|acc|prd] MUST be first target called! 
 
@@ -47,37 +47,36 @@ def general_config(ctx):
         'target_user': "mtveendam_%s" % ctx['target']
     })
     ctx.update({
-        'db_name': 'MTVEENDAM_%s' % ctx['target'].upper(),
+        'db_name': 'butterpasser_%s' % ctx['target'].upper(),
         'db_pwd': 'Nf10S09uxn',
-        'db_user': 'mtveendam_%s' % ctx['target'],
+        'db_user': 'butterpasser_%s' % ctx['target'],
         'target_user_home': "/home/%s" % ctx['target_user'],
-        'remote_conf_dir': "/home/%s/mtveendam/mtveendam/config" %
-                           ctx['target_user'],
-        'requirementsfile': '/home/%s/mtveendam/mtveendam/'
-                            'requirements.txt' % ctx['target_user'],
-        'settings_init_file': "~%s/mtveendam/mtveendam/settings/"
-                              "__init__.py" % (ctx['target_user'])
+        'remote_conf_dir': "/home/%s/_BUTTER_PASSER/project/config" % ctx['target_user'],
+        'requirementsfile': '/home/%s/_BUTTER_PASSER/requirements.txt' % ctx['target_user'],
+        'settings_init_file': "~%s/mtveendam/mtveendam/settings/__init__.py" % ctx['target_user']
     })
     ctx.update({
         # deze twee zijn lokaal!!!!
-        'conf_templates_dir': '%s/mtveendam/deployment/templates' %
-                              os.path.dirname(__file__),
-        'conf_target_dir': '%s/mtveendam/config' % os.path.dirname(__file__),
+        'conf_templates_dir': '%s/project/deployment/templates' % os.path.dirname(__file__),
+        'conf_target_dir': '%s/project/config' % os.path.dirname(__file__),
 
         'mysql_db_create_script': MYSQL_CREATE_SCRIPT % ctx,
-        'webserver_file': '%s/%s-ssl-apache.conf' % (
-            ctx['remote_conf_dir'], ctx['target_user']
-        ),
+
+        'webserver_file': '%s/%s-ssl-apache.conf' % (ctx['remote_conf_dir'], ctx['target_user']),
         'webserver_conf_dir': '/etc/apache2/sites-enabled/',
         'webserver_reload_cmd': "/etc/init.d/apache2 reload",
+
         'supervisor_conf_dir': '/etc/supervisor/conf.d/',
-        'supervisor_file': '%s/%s-supervisor.conf' % (
-            ctx['remote_conf_dir'], ctx['target_user']),
+        'supervisor_file': '%s/%s-supervisor.conf' % (ctx['remote_conf_dir'], ctx['target_user']),
+
         'supervisor_reload_cmd': '/etc/init.d/supervisor reload',
-        'app_base_dir': '%s/mtveendam' % (ctx['target_user_home']),
+
+        'app_base_dir': '%s/_BUTTER_PASSER' % (ctx['target_user_home']),
+
         'appserver_ini_file': '%s/%s-uwsgi.ini' % (
             ctx['remote_conf_dir'], ctx['target_user']
         ),
+
         'create_dirs': [
             'var/log',
             'var/data/media',
@@ -86,7 +85,7 @@ def general_config(ctx):
             'var/run',
         ],
         'native_packages': [
-            "build-essential", "python3-dev", "python-virtualenv",
+            "build-essential", "python3-dev", "python3-virtualenv",
             "libjpeg8-dev", "zlib1g-dev", "libfreetype6-dev",
             "python-psycopg2",
             # "libwebp-dev", "supervisor", "liblcms2-dev",

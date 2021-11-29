@@ -1,8 +1,8 @@
 <VirtualHost *:80>
     ServerAdmin markvergunst@gmail.com
-    ServerName ${target}.materialstestingveendam.nl
+    ServerName butterbot.hqweb.nl
     RewriteEngine On
-    RewriteRule ^(.*)$$ https://${target}.materialstestingveendam.nl$$1 [R=301,L]
+    RewriteRule ^(.*)$$ https://butterbot.hqweb.nl$$1 [R=301,L]
 </VirtualHost>
 
 
@@ -18,21 +18,21 @@
 
     Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
 
-    SSLCertificateFile    /etc/letsencrypt/live/materialstestingveendam.nl/fullchain.pem
-    SSLCertificateKeyFile /etc/letsencrypt/live/materialstestingveendam.nl/privkey.pem
-    SSLCACertificateFile /etc/letsencrypt/live/materialstestingveendam.nl/chain.pem
+    SSLCertificateFile    /etc/letsencrypt/live/hqweb.nl/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/hqweb.nl/privkey.pem
+    SSLCACertificateFile /etc/letsencrypt/live/hqweb.nl/chain.pem
 
-    <Directory /home/${target_user_home}/mtveendam>
+    <Directory /home/${target_user_home}/_BUTTER_PASSER>
       Require all granted
     </Directory>
 
-    Alias /static/ "${target_user_home}/mtveendam/static_cdn/"
-    <Directory "${target_user_home}/mtveendam/static_cdn/">
+    Alias /static/ "${target_user_home}/_BUTTER_PASSER/statics/"
+    <Directory "${target_user_home}/_BUTTER_PASSER/statics/">
         Require all granted
     </Directory>
 
-    Alias /media/ "${target_user_home}/mtveendam/media/"
-    <Directory "${target_user_home}/mtveendam/media/">
+    Alias /media/ "${target_user_home}/_BUTTER_PASSER/media/"
+    <Directory "${target_user_home}/_BUTTER_PASSER/media/">
         Require all granted
         Options -Indexes
     </Directory>
@@ -40,7 +40,7 @@
     ProxyPass /media !
     ProxyPass /static !
     # ProxyPass / uwsgi://localhost:8060/
-    ProxyPass / unix:${target_user_home}/var/run/uwsgi.${target}.sock|uwsgi://mtveendam_${target}/
+    ProxyPass / unix:${target_user_home}/var/run/uwsgi.${target}.sock|uwsgi://butterpasser_uwsgi/
 
     ErrorLog ${target_user_home}/var/log/error.log
     CustomLog ${target_user_home}/var/log/access.log combined
