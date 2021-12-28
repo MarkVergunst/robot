@@ -5,7 +5,9 @@ from django.core.cache import cache
 from PIL import Image
 from io import BytesIO
 
-if settings.USE_S3:
+from project.settings import USE_S3
+
+if USE_S3:
     s3 = boto3.resource('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
                         aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
     bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
