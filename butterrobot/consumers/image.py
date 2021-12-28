@@ -5,12 +5,12 @@ from django.core.cache import cache
 from PIL import Image
 from io import BytesIO
 
-from project.settings import USE_S3
+from project.settings import USE_S3, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME
 
 if USE_S3:
-    s3 = boto3.resource('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
-    bucket = s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME)
+    s3 = boto3.resource('s3', aws_access_key_id=AWS_ACCESS_KEY_ID,
+                        aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+    bucket = s3.Bucket(AWS_STORAGE_BUCKET_NAME)
 
 
 class ImageConsumer(AsyncJsonWebsocketConsumer):
@@ -65,7 +65,7 @@ class ImageConsumer(AsyncJsonWebsocketConsumer):
 
                     filename = f"capture.bmp"
                     if save_img:
-                        if settings.USE_S3:
+                        if USE_S3:
 
                             in_mem_file = BytesIO()
 
