@@ -1,4 +1,4 @@
-from butterrobot.utils.arduino_executer import ArduinoExecuter
+from butterrobot.utils.arduino_executer import ArduinoExecutor
 
 
 class ArduinoStrategy:
@@ -6,7 +6,7 @@ class ArduinoStrategy:
         self.name = 'Geen method gevonden'
         if func is not None:
             try:
-                self.run = getattr(ArduinoExecuter, func)
+                self.run = getattr(ArduinoExecutor, func)
             except Exception as exc:
                 self.name = f"{self.name} voor {func}"
                 print(exc)

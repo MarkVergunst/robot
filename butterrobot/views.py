@@ -1,4 +1,5 @@
 # Create your views here.
+from django.conf import settings
 from django.shortcuts import render, redirect
 
 
@@ -18,12 +19,12 @@ def game(request, room_code):
     context = {
         "room_code": room_code
     }
-    return render(request, "game.html", context)
+    return render(request, "testpage.html", context)
 
 
 def show_img(request):
 
     context = {
-
+        'settings': settings
     }
     return render(request, "image.html", context)

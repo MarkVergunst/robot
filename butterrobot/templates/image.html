@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <style> body {
         margin: 0
@@ -10,17 +10,25 @@
         height: 100%;
         width: auto
     }</style>
+    <title>Bot camera</title>
 </head>
 <body>
-<img id='topimage' src='{% static 'capture.bmp' %}' style="height: 240px; width: 320px; background-color: white" alt="capture image of camera">
-{#onload='this.style.display="initial"; var b = document.getElementById("b"); b.style.display="none"; b.src="{% static 'capture.bmp' %}?"+new Date().getTime(); '#}
-{#<img id='b' style='display: none' src='{% static 'capture.bmp' %}'#}
-{#        onload='this.style.display="initial"; var a = document.getElementById("a"); a.style.display="none"; a.src="{% static 'capture.bmp' %}?"+new Date().getTime(); '>#}
+{% if settings.USE_S3 %}
+    <img id='topimage' src='{{ settings.S3_URL }}capture.bmp'
+         style="height: 240px; width: 320px; background-color: white" alt="capture image of camera">
+{% else %}
+    <img id='topimage' src='{% static 'capture.bmp' %}'
+         style="height: 240px; width: 320px; background-color: white" alt="capture image of camera">
+{% endif %}
 </body>
 </html>
 
-{#<script>#}
-{#    setInterval(() => {#}
-{#        document.getElementById("topimage").src = "{% static 'capture.bmp' %}?timestamp=" + new Date().getTime();;#}
-{#    }, 200)#}
-{#</script>#}
+<script>
+    setInterval(() => {
+        {% if settings.USE_S3 %}
+            document.getElementById("topimage").src = "{{ settings.S3_URL }}capture.bmp?timestamp=" + new Date().getTime();
+        {% else %}
+            document.getElementById("topimage").src = "{% static 'capture.bmp' %}?timestamp=" + new Date().getTime();
+        {% endif %}
+     }, 200)
+</script>

@@ -37,6 +37,9 @@ class ArduinoConsumer(AsyncJsonWebsocketConsumer):
 
         result = executor.run(response)
 
+        if response.get('id'):
+            result.update({"id": response.get('id')})
+
         if not result.get('type'):
             result['type'] = 'send_message'
 
@@ -52,4 +55,7 @@ class ArduinoConsumer(AsyncJsonWebsocketConsumer):
         """ Receive message from room group """
         # Send message to WebSocket
         res.pop('type')
-        await self.send(text_data=json.dumps(res))
+        if res.get('bytes', None):
+            await self.send(bytes_data=res.get('bytes', None))
+        else:
+            await self.send(json.dumps(res))

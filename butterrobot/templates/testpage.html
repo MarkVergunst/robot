@@ -35,10 +35,10 @@
 
 {% block javascript %}
     <script>
-        var roomCode = document.getElementById("room_code").getAttribute("data-id");
+        const roomCode = document.getElementById("room_code").getAttribute("data-id");
 
-        var connectionString = 'wss://' + window.location.host + '/ws/' + roomCode + '/';
-        var gameSocket = new WebSocket(connectionString);
+        const connectionString = 'wss://' + window.location.host + '/ws/' + roomCode + '/';
+        const socket = new WebSocket(connectionString);
 
         function capitalizeFirstLetter(string) {
             return string.charAt(0).toUpperCase() + string.slice(1);
@@ -52,7 +52,7 @@
                 "action": "forward",
                 "pressed": pressed
             }
-            gameSocket.send(JSON.stringify(data))
+            socket.send(JSON.stringify(data))
         }
 
         function backward(pressed) {
@@ -63,7 +63,7 @@
                 "action": "backward",
                 "pressed": pressed
             }
-            gameSocket.send(JSON.stringify(data))
+            socket.send(JSON.stringify(data))
         }
 
         function left(pressed) {
@@ -74,7 +74,7 @@
                 "action": "left",
                 "pressed": pressed
             }
-            gameSocket.send(JSON.stringify(data))
+            socket.send(JSON.stringify(data))
         }
 
         function right(pressed) {
@@ -86,42 +86,36 @@
                 "action": "right",
                 "pressed": pressed
             }
-            gameSocket.send(JSON.stringify(data))
+            socket.send(JSON.stringify(data))
         }
 
         // Main function which handles the connection
         // of websocket.
         function connect() {
-            gameSocket.onopen = function open() {
+            socket.onopen = function open() {
                 console.log('WebSockets connection created.');
                 // on websocket open, send the START event.
-                gameSocket.send(JSON.stringify({
+                socket.send(JSON.stringify({
                     "event": "connect",
                     "message": "Connection is set up."
                 }));
             };
 
-            gameSocket.onclose = function (e) {
+            socket.onclose = function (e) {
                 console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
                 setTimeout(function () {
                     connect();
                 }, 1000);
             };
-            // Sending the info about the room
-            gameSocket.onmessage = function (e) {
-                // On getting the message from the server
-                // Do the appropriate steps on each event.
-                let data = JSON.parse(e.data);
-                // data = data["payload"];
-                let message = data['message'];
-                let event = data["event"];
-                console.log(data)
-                document.getElementById('channel-text').innerHTML = capitalizeFirstLetter(message);
 
+            socket.onmessage = function (e) {
+                let data = JSON.parse(e.data);
+                let message = data['message'];
+                document.getElementById('channel-text').innerHTML = capitalizeFirstLetter(message);
             };
 
-            if (gameSocket.readyState === WebSocket.OPEN) {
-                gameSocket.onopen(undefined);
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.onopen(undefined);
             }
         }
 
