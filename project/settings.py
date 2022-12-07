@@ -194,8 +194,8 @@ USE_S3 = True
 
 if USE_S3:
     # aws settings
-    AWS_ACCESS_KEY_ID = 'AKIAZUVKY25YF3KAKZ5U'
-    AWS_SECRET_ACCESS_KEY = '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'
+    AWS_ACCESS_KEY_ID = ''
+    AWS_SECRET_ACCESS_KEY = ''
     AWS_STORAGE_BUCKET_NAME = 'robot-bucket-r-m'
     AWS_DEFAULT_ACL = 'public-read'
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
